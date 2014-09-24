@@ -18,16 +18,11 @@ puts "what's your age bro?"
 user_age = gets.chomp.to_i
 puts "Hi #{user_name} who is #{user_age}"
 
-answer = "" # the empty string
+print "What is your gender? M)ale or F)emale: "
+answer = gets.chomp.upcase
 
-while answer != "M" and answer != "F" do
-  print "What is your gender? M)ale or F)emale: "
-  answer = gets.chomp
-end
+puts "M" == answer ? "Hi, fella" : "Hello, lady"
 
-if answer == "M"
-  puts "Hi, fella!"
-else
-  puts "Hello, lady!"
-end
 puts ((user_age <21 ? "You're too young" : "Go drink"))
+
+
