@@ -1,83 +1,93 @@
 require 'pry'
-def get_name
-puts "what is you name?"
-return gets.chomp	
+
+def print_greeting
+puts "Greetings, Human!"
 end
 
-def get_mood
-	puts "what is your mood?"
-	return gets.chomp.downcase
+def get_user_info
+	user = {}
+	puts "What is your name? "
+	user[:name] = gets.chomp
+	puts "What is your age? "
+	user[:age] = gets.chomp.to_i
+	puts "what is your mood? "
+	user[:mood] = gets.chomp.downcase
+	puts "what is your gender? "
+	user[:gender] = gets.chomp.upcase
+
+	user
 end
 
-def get_age
-	puts "what's your age?"
-	return gets.chomp.to_i
-end
+#def print_friendly_greeting(user)
+#puts "Hi #{user[:name]} who is #{user[:age]} years old!"
+#end
 
-
-def relation_to_75(age)
+def relation_to_75(user)
 	case 
-	when age < 75
-		puts "you'll be 75 in #{75 - age}"
-	when age == 75
+	when user[:age] < 75
+		years_from_75 = 75 - user[:age]
+		puts "you'll be 75 in #{years_from_75} years"
+	when user[:age] == 75
 		puts "you are 75"
-	when age > 75 
-		puts "you turned 75 #{age - 75}"	
+	when user[:age] > 75
+		years_over_75 = user[:age] - 75 
+		puts "you are over 75 by #{years_over_75} years"	
+	end
+end
+def ask_user_about_nickname(user)
+	first_initial = user[:name].chars.first
+	answer = ask_user?("Do you mind if I call you #{first_initial} (yes or no)?")
+	if answer
+		puts "Okay, I will not call you that."
+		user[:nickname] = user[:name]
+	else
+		puts "Cool, From now on I will call you #{first_initial}!"
+		user[:nickname] = first_initial
 	end
 end
 
-def if_your_a_grandparent(age,gender)
-	if age > 60 && gender.upcase == "M"
+def if_your_a_grandparent(user)
+	if user[:age] > 60 && user[:gender].upcase == "M"
 		puts "Are you a grandfather"
-	elsif age > 60 && gender.upcase == "F" 
+	elsif user[:age] > 60 && user[:gender].upcase == "F" 
 		puts "Are you a grandmother"
 	else 
 		puts "You probably aren't a grandparent"	
 	end			
 end
 
-def if_your_a_young_child(age,gender)
-	if age < 18 && gender.upcase == "M"
+def if_your_a_young_child(user)
+	if user[:age] < 18 && user[:gender].upcase == "M"
 		puts "Are you a young boy"
-	elsif age < 18 && gender.upcase == "F" 
+	elsif [:age] < 18 && user[:gender].upcase == "F" 
 		puts "Are you a young girl"
 	else 
 		puts "Your old"	
 	end			
 end
 
+def grocery_list
+	puts "== Let's go grocery shopping! =="
+	grocery_list = ["butter", "bread", "water", "dog_food", "soda", "steak"]
+	puts "Here is your grocery list: #{grocery_list.join(', ')}"
+	while grocery_list.length > 0
+		random_item = grocery_list.sample
+		answer = ask_user?("Did you grab the #{random_item} (yes or no)? ")
+		if answer
+			grocery_list.delete(random_item)
+		end
+		puts "Now your grocery list is #{grocery_list.join(', ')}"
+	end
+end
 
-puts "Test message"
-puts "We're runing this in terminal"
+def print_farewell(user)
+puts "Farewell #{user[:nickname]}!"
+end
 
-user_name = get_name
-
-puts "Hey #{user_name}, sup?"
-
-mood = get_mood
-puts "Glad to hear you're #{mood}!"
-
-user_age = get_age
-
-puts "Hi #{user_name} who is #{user_age}"
-
-puts "What is your gender? M)ale or F)emale: "
-answer = gets.chomp.upcase
-if_your_a_grandparent(user_age,answer)
-if_your_a_young_child(user_age,answer)
-
-
-puts "M" == answer ? "Hi, fella" : "Hello, lady"
-
-puts ((user_age <21 ? "You're too young" : "Go get drink"))
-
-grocery_list = ["butter", "bread", "water", "dog_food", "soda", "steak"]
-item = grocery_list[rand(grocery_list.length + 1)]
-puts "Did you grab the #{item}?"
-grocery_list.delete(item)
-puts "Oh yeah,don't forget:"
-new_item = gets.chomp
-grocery_list << new_item
-grocery_list.each do |item|
-puts item
-end 
+print_greeting
+the_user = get_user_info
+#print_friendly_greeting(the_user)
+ask_user_about_nickname(the_user)
+print_age_based_message(the_user)
+grocery_list
+print_farewell(the_user)
