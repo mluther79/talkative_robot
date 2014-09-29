@@ -163,3 +163,32 @@ if_your_a_young_child(the_user)
 grocery_list(new_grocery_list)
 # select_by_name(people, author[:full_name])
 # author_info(the_user, people)
+
+
+#start
+ def first_initial(user)
+  user[:name].first.chars
+ end	
+first_initial(user)
+
+#Working area 
+Class User
+  def initialize(args)
+  	@name = args[:name]
+  	@age  = args[:age]
+  end
+  
+  def first_initial
+  	@name.char.first
+  end		
+
+  def age_based_message
+	puts "You're old, dude" if @age > 100
+  end
+end
+
+
+puts "What's your name?"
+user[:name] = gets.chomp
+puts "How old are you?"
+user[:age] = gets.chomp
