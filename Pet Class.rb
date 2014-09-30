@@ -16,6 +16,6 @@ class Pet
 	  @gender = gender
 	  @type   = type
 	  @breed  = breed
-	 end 
+	end 
 end	 
 My_dog = Pet.new(name:"Maverick", age: 3, :gender"M", type:"dog", breed:"boxer/gsp)

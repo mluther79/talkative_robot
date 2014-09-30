@@ -1,4 +1,5 @@
 require 'pry'
+require 'csv'
 
 def print_greeting
 	puts "Greetings, Human!"
@@ -33,6 +34,11 @@ def relation_to_75(the_user)
 		puts "you are over 75 by #{years_over_75} years"	
 	end
 end
+
+def confirmation_answer?(answer)
+	answer == "yes" || answer == "y" || answer == "yeah"
+end
+
 def ask_user_about_nickname(the_user)
 	first_initial = the_user[:name].chars.first
 	puts "Do you mind if I call you #{first_initial} (yes or no)?"
@@ -60,9 +66,9 @@ def if_your_a_young_child(user)
 	puts "You probably aren't a child." unless child_title
 end
 
-def grocery_list(grocery_list)
+def grocery_shopping(grocery_list, user)
 	puts "== Let's go grocery shopping! =="
-	# grocery_list= IO.write("grocery_list.txt", grocery_list.join(", "))
+	grocery_list= IO.write("grocery_list.txt", grocery_list.join(", "))
 	grocery_list = IO.read("grocery_list.txt").split(',')
 	puts "Here is your grocery list: #{grocery_list.join(', ')}"
 	puts "You have #{grocery_list.length} items in your grocery list."
@@ -72,24 +78,25 @@ def grocery_list(grocery_list)
 		answer = gets.chomp
 		if confirmation_answer?(answer)
 			grocery_list.delete(random_item)
+		end
 		
-		# puts "Now your grocery list is.. #{grocery_list.join(', ')}"
+		puts "Now your grocery list is.. #{grocery_list.join(', ')}"
 	
-		# puts "Okay! sounds good, I will try not to forget your #{user[:drink]} when I go to the store later."
+		puts "Okay! sounds good, I will try not to forget your #{user[:drink]} when I go to the store later."
 	
-	# grocery_list.unshift(user[:drink])
+	grocery_list.unshift(user[:drink])
 
-	# user[:grocery_list] = grocery_list.each_index {|i| puts "Item #{i+1} -- #{grocery_list[i]}"}
+	user[:grocery_list] = grocery_list.each_index {|i| puts "Item #{i+1} -- #{grocery_list[i]}"}
 
-	# puts "Checkout my grocery list to make sure I got it right: #{user[:grocery_list]}."
+	puts "Checkout my grocery list to make sure I got it right: #{user[:grocery_list]}."
 
-	# IO.write("grocery_list_2.txt", user[:grocery_list].join(", "))
+	IO.write("grocery_list_2.txt", user[:grocery_list].join(", "))
 	end
 end
 
-# def writting_grocery_list(grocery_list)
-# 	IO.write("grocery_list.txt", grocery_list.join(','))
-# end
+def writting_grocery_list(grocery_list)
+	IO.write("grocery_list.txt", grocery_list.join(','))
+end
 
 def write_to_csv(grocery_list, any_csv_file)
 	CSV.open(any_csv_file, "w") do |csv|
@@ -101,94 +108,70 @@ end
 def read_from_csv(any_csv_file)
 	#col_data0 = []
 	col_data = []
-	CSV.foreach('any_csv_file') { |row| col_data << row[1] }
+	CSV.foreach(any_csv_file) { |row| col_data << row[1] }
 	col_data
 end	
     
 def print_csv(col_data)
 	puts "This is the current grocery list."
-	col_data.shift
-	puts col_data
+	puts col_data.join(",")
 end
 
-grocery_list = read_from_csv
+
+grocery_list = read_from_csv("groceries.csv")
 print_csv(grocery_list)
-write_to_csv(grocery_list)
+write_to_csv(grocery_list, "groceries2.csv")
 
-# def recreation_question(user)
-# 	puts "What do you do for recreation?"
-# 	user[:recreation] = gets.chomp.downcase
-# 	puts "Glad to hear you like #{user[:recreation]}, I thought you were going to say drawing! \n\n"
-# end
-
-def confirmation_answer?(answer)
-	answer == "yes" || answer == "y" || answer == "yeah"
+def recreation_question(user)
+	puts "What do you do for recreation?"
+	user[:recreation] = gets.chomp.downcase
+	puts "Glad to hear you like #{user[:recreation]}, I thought you were going to say drawing! \n\n"
 end
 
-# def select_by_name(array_of_users, full_name)
-# 	puts "Here is some information about:"
-# 	puts array_of_users.select { |person| person[:full_name] == full_name }.first.first
-# end
+def drink_question(user)
+	puts "What is your favorite drink?"
+	user[:drink] = gets.chomp.downcase
+	puts "Nice, I like #{user[:drink]} too!"
+end
 
-# def author_info(person, array_of_persons)	
-# 	puts "(The author of this program)"
-# 	puts array_of_persons.reject { |person| person[:full_name] != "Michael Luther" }.first
+def select_by_name(array_of_users, full_name)
+	puts "Here is some information about:"
+	puts array_of_users.select { |person| person[:full_name] == full_name }.first.first
+end
+
+def author_info(person, array_of_persons)	
+	puts "(The author of this program)"
+	puts array_of_persons.reject { |person| person[:full_name] != "Michael Luther" }.first
 	
-# end
+end
 
-# author = { full_name: "Michael Luther", 
-# 	first_name: "Michael", 
-# 	last_name: "Luther", 
-# 	gender_full: "Male", 
-# 	gender_short: "m", 
-# 	marital_status: "no", 
-# 	marital_status_short: "n", 
-# 	age: 34, 
-# 	nickname_answer: "yes",
-# 	nickname: "The Boss", drink: "Red Bull",
-# 	recreation: "Snowboarding"
-
-# 	people == [the_user, author]
-# end
+author = { full_name: "Michael Luther", 
+	first_name: "Michael", 
+	last_name: "Luther", 
+	gender_full: "Male", 
+	gender_short: "m", 
+	marital_status: "no", 
+	marital_status_short: "n", 
+	age: 34, 
+	nickname_answer: "yes",
+	nickname: "The Boss", drink: "Red Bull",
+	recreation: "Snowboarding"
+}
 
 new_grocery_list = ["butter", "bread", "water", "dog_food", "soda", "steak"]
 print_greeting
 the_user = get_user_info
+
+people = [the_user, author]
+
 print_friendly_greeting(the_user)
 ask_user_about_nickname(the_user)
+
 if_your_a_grandparent(the_user)
 if_your_a_young_child(the_user)
-# recreation_question(the_user)
-# writting_grocery_list(new_grocery_list)
-grocery_list(new_grocery_list)
-# select_by_name(people, author[:full_name])
-# author_info(the_user, people)
-
-
-#start
- def first_initial(user)
-  user[:name].first.chars
- end	
-first_initial(user)
-
-#Working area 
-Class User
-  def initialize(args)
-  	@name = args[:name]
-  	@age  = args[:age]
-  end
-  
-  def first_initial
-  	@name.char.first
-  end		
-
-  def age_based_message
-	puts "You're old, dude" if @age > 100
-  end
-end
-
-
-puts "What's your name?"
-user[:name] = gets.chomp
-puts "How old are you?"
-user[:age] = gets.chomp
+recreation_question(the_user)
+drink_question(the_user)
+writting_grocery_list(new_grocery_list)
+grocery_shopping(new_grocery_list, the_user)
+select_by_name(people, author[:full_name])
+author_info(the_user, people)
